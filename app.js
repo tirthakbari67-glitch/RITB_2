@@ -3,8 +3,6 @@
 const API = ' https://ritb-backend-api.onrender.com';
 const SERVER = ' https://ritb-backend-api.onrender.com';
 
-
-
 // ─── If opened via file://, display a warning or handle gracefully ───
 if (window.location.protocol === 'file:') {
   console.warn("You are opening this file directly. Some features might require a web server.");
@@ -12,7 +10,8 @@ if (window.location.protocol === 'file:') {
 
 // ─── Navigate helper: use relative paths since frontend is static ───
 function goTo(page) {
-  window.location.href = page;
+  // Use explicit relative path to work even if opened via file:// protocol
+  window.location.href = './' + page;
 }
 
 // ─── Toast Notifications ───
