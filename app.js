@@ -3,13 +3,12 @@
 const API = ' https://ritb-backend-api.onrender.com';
 const SERVER = ' https://ritb-backend-api.onrender.com';
 
-// ─── If opened via file://, redirect to the Flask server immediately ───
-(function () {
-  if (window.location.protocol === 'file:') {
-    const path = window.location.pathname.split('/').pop() || 'index.html';
-    window.location.replace(SERVER + '/' + path + window.location.search);
-  }
-})();
+
+
+// ─── If opened via file://, display a warning or handle gracefully ───
+if (window.location.protocol === 'file:') {
+  console.warn("You are opening this file directly. Some features might require a web server.");
+}
 
 // ─── Navigate helper: use relative paths since frontend is static ───
 function goTo(page) {
