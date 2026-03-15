@@ -1,17 +1,20 @@
 /* ─── App.js — RITB Shared JS ─── */
 
-const API = ' https://ritb-backend-api.onrender.com';
+const API =  'https://ritb-backend-api.onrender.com';
 const SERVER = ' https://ritb-backend-api.onrender.com';
 
-// ─── If opened via file://, display a warning or handle gracefully ───
-if (window.location.protocol === 'file:') {
-  console.warn("You are opening this file directly. Some features might require a web server.");
-}
+// ─── If opened directly via file://, auto-redirect to the server ───
+(function () {
+  if (window.location.protocol === 'file:') {
+    const page = window.location.pathname.split('/').pop() || 'index.html';
+    const search = window.location.search || '';
+    window.location.replace(SERVER + '/' + page + search);
+  }
+})();
 
-// ─── Navigate helper: use relative paths since frontend is static ───
+// ─── Navigate helper: always navigate via the server origin ───
 function goTo(page) {
-  // Use explicit relative path to work even if opened via file:// protocol
-  window.location.href = './' + page;
+  window.location.href = SERVER + '/' + page;
 }
 
 // ─── Toast Notifications ───
