@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Detail | RITB</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <style>
+    .event-hero {
+      height: 500px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .event-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.7);
+    }
+
+    .event-hero-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 4rem 0 2rem;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+      color: #fff;
+    }
+
+    .event-info-box {
+      background: var(--surface-container-lowest);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-card);
+      top: -6rem;
+      position: relative;
+      z-index: 10;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="nav" style="background:rgba(26,27,33,0.85);border-bottomColor:rgba(255,255,255,0.1)">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" style="color:#fff">RITB</a>
+      <div class="nav-links">
+        <a href="index.html" style="color:rgba(255,255,255,0.7)">Home</a>
+        <a href="news-archive.html" style="color:rgba(255,255,255,0.7)">News</a>
+        <a href="events-calendar.html" class="active" style="color:#fff;background:rgba(255,255,255,0.1)">Events</a>
+        <a href="faculty-directory.html" style="color:rgba(255,255,255,0.7)">Faculty</a>
+      </div>
+      <div class="nav-actions" id="nav-actions"></div>
+    </div>
+  </nav>
+
+  <div class="event-hero">
+    <img id="event-img" src="" alt="" onerror="imgFallback(this,'event')">
+    <div class="event-hero-content">
+      <div class="container">
+        <span class="chip chip-tertiary label-sm mb-3" id="event-cat">Category</span>
+        <h1 class="display-lg font-display" id="event-title" style="margin-bottom:1rem;color:#fff">Loading...</h1>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:1fr 2fr;gap:4rem">
+        <!-- Info Box -->
+        <div>
+          <div class="event-info-box">
+            <h3 class="title-lg mb-4">Event Details</h3>
+
+            <div class="flex items-start gap-3 mb-4">
+              <span class="material-symbols-rounded text-primary">calendar_month</span>
+              <div>
+                <div class="font-weight-bold" id="event-date"></div>
+                <div class="text-sm text-muted" id="event-time"></div>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 mb-6">
+              <span class="material-symbols-rounded text-primary">location_on</span>
+              <div>
+                <div class="font-weight-bold">Location</div>
+                <div class="text-sm text-muted" id="event-location"></div>
+              </div>
+            </div>
+
+            <div class="divider mb-4"></div>
+
+            <div class="flex items-center gap-3 mb-6">
+              <div
+                style="width:40px;height:40px;border-radius:50%;background:var(--primary-fixed);display:flex;align-items:center;justify-content:center;color:var(--primary)">
+                <span class="material-symbols-rounded">person</span>
+              </div>
+              <div>
+                <div class="text-sm text-muted">Organized by</div>
+                <div class="font-weight-bold" id="event-org"></div>
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-full btn-lg mb-3">RSVP Now</button>
+            <button class="btn btn-outline btn-full" onclick="showToast('Added to calendar','success')">Add to
+              Calendar</button>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div style="padding-top:2rem">
+          <h2 class="display-sm font-display mb-4">About the Event</h2>
+          <div class="article-body body-lg" id="event-desc" style="white-space:pre-wrap"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="app.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+
+    async function loadEvent() {
+      if (!id) return;
+      try {
+        const ev = await apiFetch(`/api/events/${id}`);
+        document.title = `${ev.title} | RITB`;
+        document.getElementById('event-img').src = ev.image_url || '';
+        document.getElementById('event-cat').textContent = ev.category;
+        document.getElementById('event-title').textContent = ev.title;
+        document.getElementById('event-date').textContent = formatDate(ev.event_date);
+        document.getElementById('event-time').textContent = `${formatTime(ev.time_start)} – ${formatTime(ev.time_end)}`;
+        document.getElementById('event-location').textContent = ev.location;
+        document.getElementById('event-org').textContent = ev.organizer_name || 'University Faculty';
+        document.getElementById('event-desc').textContent = ev.description;
+      } catch (e) { console.error(e); }
+    }
+
+    loadEvent();
+  </script>
+</body>
+
+</html>
