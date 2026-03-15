@@ -11,9 +11,9 @@ const SERVER = ' https://ritb-backend-api.onrender.com';
   }
 })();
 
-// ─── Navigate helper: always use the server origin ───
+// ─── Navigate helper: use relative paths since frontend is static ───
 function goTo(page) {
-  window.location.href = SERVER + '/' + page;
+  window.location.href = page;
 }
 
 // ─── Toast Notifications ───
